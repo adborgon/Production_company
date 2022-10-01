@@ -19,7 +19,7 @@ namespace Element
             _available = true;
         }
 
-        public virtual void Assign()
+        public virtual void Assign(Step.Step step = null)
         {
             _available = false;
         }

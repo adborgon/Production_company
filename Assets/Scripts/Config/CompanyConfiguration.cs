@@ -33,12 +33,22 @@ namespace Config
 
         #region Company Configuration Varibles
 
+        //Company
+
         public int VendingMachineQuantiy = 12;
         public int TableQuantiy = 3;
         public int WorkbenchQuantiy = 2;
 
+        //Vending Machine Config
+
         public int VendingMachineWaitingTime = 5;
         public int VendingMachineMaxWorkers = 3;
+
+        //Worker
+
+        public int WorkerTableWaiting = 3;
+        public int WorkerWorkbenchWaiting = 4;
+        public int WorkerAngryWaiting = 2;
 
         #endregion Company Configuration Varibles
     }
