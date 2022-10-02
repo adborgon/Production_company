@@ -20,5 +20,14 @@ namespace Worker
             this.workbenchWaiting = workbenchWaiting;
             this.angryWaiting = angryWaiting;
         }
+
+        public static bool Equals(Worker obj1, Worker obj2)
+        {
+            if (obj1.id == obj2.id)
+                return true;
+            else
+                return false;
+        }
+
     }
 }

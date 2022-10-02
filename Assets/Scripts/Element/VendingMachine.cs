@@ -13,11 +13,8 @@ namespace Element
         public readonly int waitingTime = Config.CompanyConfiguration.Instance.VendingMachineWaitingTime;
         private readonly int _maxWorkers = Config.CompanyConfiguration.Instance.VendingMachineMaxWorkers;
 
-        public Action<VendingMachine> OnVendingMachineCompleted;
-
         [SerializeField] private List<Step.Step> _workersWaiting = new List<Step.Step>();
         [SerializeField] private bool _running;
-        [SerializeField] private int _currentWorkers;
 
         public override void Init(int id)
         {
@@ -26,10 +23,14 @@ namespace Element
 
         public override void Assign(Step.Step step)
         {
-            if (_currentWorkers < _maxWorkers)
+            if (_workersWaiting.Count < _maxWorkers)
             {
                 _workersWaiting.Add(step);
-                _currentWorkers++;
+                if (!_running)
+                {
+                    _running = true;
+                    StartCountDown();
+                }
             }
         }
 
@@ -43,18 +44,23 @@ namespace Element
 
         private void ElapsedMethod(object sender, ElapsedEventArgs e)
         {
-            OnVendingMachineCompleted?.Invoke(this);
+            EventDispatcherService.Instance.Dispatch(new VendingMachineTimeOut((Step.StepVendingMachine)_workersWaiting[0]));
+            Release();
         }
 
         public override bool isRealised()
         {
-            if (_currentWorkers < _maxWorkers) return true;
+            if (_workersWaiting.Count < _maxWorkers) return true;
             else return false;
         }
 
         public override void Release()
         {
-            if (_currentWorkers > 0) _currentWorkers--;
+            _workersWaiting.Remove(_workersWaiting[0]);
+            if (_workersWaiting.Count > 0)
+                StartCountDown();
+            else
+                _running = false;
         }
     }
 }

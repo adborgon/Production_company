@@ -1,34 +1,40 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Timers;
 using UnityEngine;
 
 public class Main : MonoBehaviour
 {
-    //To remove, only to show results
-    [SerializeReference] public List<KeyValuePair> MyList = new List<KeyValuePair>();
+    public int workersCount;
 
-    // Start is called before the first frame update
     private void Start()
     {
         Element.ElementWareHouse.Instance.InitWarehouse();
-        Worker.Worker worker = new Worker.Worker();
-        worker.Init("1", Config.CompanyConfiguration.Instance.WorkerTableWaiting, Config.CompanyConfiguration.Instance.WorkerWorkbenchWaiting, Config.CompanyConfiguration.Instance.WorkerAngryWaiting);
 
-        Step.Step[] steps = { new Step.StepTable(), new Step.StepWorkbench() };
-        Worker.WorkerManager workerManager = new Worker.WorkerManager();
-        workerManager.Init(worker, steps);
+        for (int i = 0; i < workersCount; i++)
+        {
+            Worker.Worker worker = new Worker.Worker();
+            worker.Init(i.ToString(), Config.CompanyConfiguration.Instance.WorkerTableWaiting, Config.CompanyConfiguration.Instance.WorkerWorkbenchWaiting, Config.CompanyConfiguration.Instance.WorkerAngryWaiting);
+
+            Step.Step[] steps = { new Step.StepVendingMachine(), new Step.StepTable(), new Step.StepWorkbench() };
+            Worker.WorkerManager workerManager = new Worker.WorkerManager();
+            workerManager.Init(worker, steps);
+        }
     }
 
-    // Update is called once per frame
+    private void OnApplicationQuit()
+    {
+    }
+
+    #region Show Results On editor
+
+    //To remove, only to show results
+    [SerializeReference] public List<KeyValuePair> MyList = new List<KeyValuePair>();
+
+    //To remove, only to show results
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-
-        }
-        //To remove, only to show results
-
         MyList.Clear();
         foreach (var kvp in Element.ElementWareHouse.Instance.elementsOnWarehouse)
         {
@@ -41,44 +47,31 @@ public class Main : MonoBehaviour
         }
     }
 
-    private void OnStepCompleted(Step.Step step)
+    [Serializable]
+    public class KeyValuePair
     {
-        Debug.Log("StepCompleted");
-        step.Release();
-        //Next Step
+        public string key;
+        public List<KeyValuePairElement> val;
+
+        public KeyValuePair(string key, List<KeyValuePairElement> val)
+        {
+            this.key = key;
+            this.val = val;
+        }
     }
 
-    private void OnStepFailed()
+    [Serializable]
+    public class KeyValuePairElement
     {
-        Debug.Log("StepFailed");
-        //WaitAngry
+        public string id;
+        public bool available;
+
+        public KeyValuePairElement(string id, bool available)
+        {
+            this.id = id;
+            this.available = available;
+        }
     }
-}
 
-//To remove, only to show results
-
-[Serializable]
-public class KeyValuePair
-{
-    public string key;
-    public List<KeyValuePairElement> val;
-
-    public KeyValuePair(string key, List<KeyValuePairElement> val)
-    {
-        this.key = key;
-        this.val = val;
-    }
-}
-
-[Serializable]
-public class KeyValuePairElement
-{
-    public string id;
-    public bool available;
-
-    public KeyValuePairElement(string id, bool available)
-    {
-        this.id = id;
-        this.available = available;
-    }
+    #endregion Show Results On editor
 }

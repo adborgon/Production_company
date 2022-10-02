@@ -15,7 +15,7 @@ public class EventTester : MonoBehaviour
     {
         if (Input.GetKeyUp(KeyCode.Escape))
         {
-            EventDispatcherService.Instance.Dispatch(new VendingMachineTimeOut(new Step.StepVendinMachine()));
+            EventDispatcherService.Instance.Dispatch(new VendingMachineTimeOut(new Step.StepVendingMachine()));
         }
     }
 }

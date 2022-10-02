@@ -35,9 +35,9 @@ namespace Config
 
         //Company
 
-        public int VendingMachineQuantiy = 12;
-        public int TableQuantiy = 3;
-        public int WorkbenchQuantiy = 2;
+        public int VendingMachineQuantiy = 2;
+        public int TableQuantiy = 1;
+        public int WorkbenchQuantiy = 1;
 
         //Vending Machine Config
 
@@ -46,7 +46,7 @@ namespace Config
 
         //Worker
 
-        public int WorkerTableWaiting = 3;
+        public int WorkerTableWaiting = 10;
         public int WorkerWorkbenchWaiting = 4;
         public int WorkerAngryWaiting = 2;
 

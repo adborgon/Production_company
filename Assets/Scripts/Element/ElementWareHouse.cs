@@ -28,7 +28,7 @@ namespace Element
             elementsOnWarehouse.Add(typeof(VendingMachine), ElementSpawner.SpawnElements<VendingMachine>(Config.CompanyConfiguration.Instance.VendingMachineQuantiy));
         }
 
-        public Element isAElemenReady<T>()
+        public Element isAElemenReadyAndAssign<T>()
         {
             List<Element> list;
             if (elementsOnWarehouse.TryGetValue(typeof(T), out list))

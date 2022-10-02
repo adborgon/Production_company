@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Timers;
 using UnityEngine;
 
 namespace Worker
@@ -33,6 +34,7 @@ namespace Worker
             {
                 Debug.Log("Finish Steps");
                 currentStepCounter = 0;
+                StartCurrentStep();
             }
             else
             {
@@ -55,17 +57,38 @@ namespace Worker
 
         private void OnStepCompleted(Step.Step step)
         {
-            Debug.Log("StepCompleted");
+            Debug.Log($"Step Completed: {worker.id} on {step.elementReady.id}");
+            ReleaseHandlers();
             step.Release();
             NextStep();
         }
 
         private void OnStepFailed()
         {
-            Debug.Log("StepFailed");
-            //WaitAngry
+            Debug.Log($"Step Failed: {worker.id} on step {currentStepCounter} ¡Rage quit!");
+            ReleaseHandlers();
+            StartAngryTimer();
+        }
+
+        private void ElapsedMethod(object sender, ElapsedEventArgs e)
+        {
+            StartCurrentStep();
+        }
+
+        private void ReleaseHandlers()
+        {
+            currentStep.OnStepCompleted -= OnStepCompleted;
+            currentStep.OnStepFailed -= OnStepFailed;
         }
 
         #endregion Handlers
+
+        private void StartAngryTimer()
+        {
+            Timer timer = new Timer(worker.angryWaiting * 1000); // seconds to miliseconds
+            timer.Elapsed += (sender, e) => ElapsedMethod(sender, e);
+            timer.AutoReset = false;
+            timer.Start();
+        }
     }
 }

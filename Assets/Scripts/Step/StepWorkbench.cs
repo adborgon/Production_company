@@ -14,14 +14,13 @@ namespace Step
         public override void Start(Worker.Worker worker)
         {
             _waitTimer = worker.workbenchWaiting;
-            elementReady = (Element.Workbech)Element.ElementWareHouse.Instance.isAElemenReady<Element.Workbech>();
+            elementReady = (Element.Workbech)Element.ElementWareHouse.Instance.isAElemenReadyAndAssign<Element.Workbech>();
             if (elementReady == null)
             {
                 OnStepFailed?.Invoke();
                 return;
             }
             Debug.Log($"{worker.id} is running {elementReady.id}");
-
             Assign();
         }
     }

@@ -5,6 +5,7 @@ using System.Timers;
 
 namespace Step
 {
+    [Serializable]
     public abstract class Step
     {
         public Action<Step> OnStepCompleted;
@@ -12,6 +13,7 @@ namespace Step
 
         public Element.Element elementReady;
         public float _waitTimer; //in seconds
+
         public abstract void Start(Worker.Worker worker); //Falta Input Worker
 
         public virtual void Assign()
